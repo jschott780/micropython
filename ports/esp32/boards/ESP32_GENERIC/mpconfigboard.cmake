@@ -1,6 +1,7 @@
 set(SDKCONFIG_DEFAULTS
     boards/sdkconfig.base
     boards/sdkconfig.ble
+    boards/ESP32_GENERIC/sdkconfig.defaults
 )
 
 if(MICROPY_BOARD_VARIANT STREQUAL "D2WD")

@@ -29,6 +29,7 @@
 
 #include "py/runtime.h"
 #include "py/mphal.h"
+#include "soc/uart_periph.h"
 #include "uart.h"
 
 #if MICROPY_HW_ENABLE_UART_REPL
