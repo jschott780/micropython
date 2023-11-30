@@ -188,6 +188,7 @@ target_compile_options(${MICROPY_TARGET} PUBLIC
 # Additional include directories needed for private NimBLE headers.
 target_include_directories(${MICROPY_TARGET} PUBLIC
     ${IDF_PATH}/components/bt/host/nimble/nimble
+    ${IDF_PATH}/components/bt/host/nimble/esp-hci/include
 )
 
 # Add additional extmod and usermod components.
