@@ -30,6 +30,7 @@
 // This file is never compiled standalone, it's included directly from
 // extmod/machine_pwm.c via MICROPY_PY_MACHINE_PWM_INCLUDEFILE.
 
+#include "hal/ledc_types.h"
 #include <math.h>
 #include "py/mphal.h"
 #include "driver/ledc.h"
@@ -241,7 +242,7 @@ STATIC void set_freq(machine_pwm_obj_t *self, unsigned int freq, ledc_timer_conf
         // Configure the new resolution and frequency
         timer->duty_resolution = res;
         timer->freq_hz = freq;
-        timer->clk_cfg = LEDC_USE_APB_CLK;
+        timer->clk_cfg = LEDC_USE_XTAL_CLK;
         #if SOC_LEDC_SUPPORT_REF_TICK
         if (freq < EMPIRIC_FREQ) {
             timer->clk_cfg = LEDC_USE_REF_TICK;

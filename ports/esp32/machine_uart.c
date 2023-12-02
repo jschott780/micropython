@@ -353,7 +353,7 @@ STATIC mp_obj_t mp_machine_uart_make_new(const mp_obj_type_t *type, size_t n_arg
             self->rx = 9;
             self->tx = 10;
             break;
-        #if SOC_UART_NUM > 2
+        #if SOC_UART_NUM > 2 && !CONFIG_IDF_TARGET_ESP32C6
         case UART_NUM_2:
             self->rx = 16;
             self->tx = 17;

@@ -28,6 +28,7 @@
 #include "py/mphal.h"
 #include "adc.h"
 #include "driver/adc.h"
+#include "esp_adc_cal.h"
 
 #define DEFAULT_VREF 1100
 
@@ -71,11 +72,11 @@ void madcblock_bits_helper(machine_adc_block_obj_t *self, mp_int_t bits) {
 
 mp_int_t madcblock_read_helper(machine_adc_block_obj_t *self, adc_channel_t channel_id) {
     int raw;
-    if (self->unit_id == ADC_UNIT_1) {
+    //if (self->unit_id == ADC_UNIT_1) {
         raw = adc1_get_raw(channel_id);
-    } else {
-        check_esp_err(adc2_get_raw(channel_id, self->width, &raw));
-    }
+    //} else {
+    //    check_esp_err(adc2_get_raw(channel_id, self->width, &raw));
+    //}
     return raw;
 }
 

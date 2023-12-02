@@ -94,6 +94,14 @@ STATIC const machine_adc_obj_t madc_obj[] = {
     {{&machine_adc_type}, ADCBLOCK1, ADC_CHANNEL_3, GPIO_NUM_3},
     {{&machine_adc_type}, ADCBLOCK1, ADC_CHANNEL_4, GPIO_NUM_4},
     {{&machine_adc_type}, ADCBLOCK2, ADC_CHANNEL_0, GPIO_NUM_5},
+    #elif CONFIG_IDF_TARGET_ESP32C6
+    {{&machine_adc_type}, ADCBLOCK1, ADC_CHANNEL_0, GPIO_NUM_1},
+    {{&machine_adc_type}, ADCBLOCK1, ADC_CHANNEL_1, GPIO_NUM_2},
+    {{&machine_adc_type}, ADCBLOCK1, ADC_CHANNEL_2, GPIO_NUM_3},
+    {{&machine_adc_type}, ADCBLOCK1, ADC_CHANNEL_3, GPIO_NUM_4},
+    {{&machine_adc_type}, ADCBLOCK1, ADC_CHANNEL_4, GPIO_NUM_5},
+    {{&machine_adc_type}, ADCBLOCK1, ADC_CHANNEL_5, GPIO_NUM_6},
+    {{&machine_adc_type}, ADCBLOCK1, ADC_CHANNEL_6, GPIO_NUM_7},
     #elif CONFIG_IDF_TARGET_ESP32S2 || CONFIG_IDF_TARGET_ESP32S3
     {{&machine_adc_type}, ADCBLOCK1, ADC_CHANNEL_0, GPIO_NUM_1},
     {{&machine_adc_type}, ADCBLOCK1, ADC_CHANNEL_1, GPIO_NUM_2},
@@ -152,7 +160,7 @@ STATIC void madc_atten_helper(const machine_adc_obj_t *self, mp_int_t atten) {
     if (self->block->unit_id == ADC_UNIT_1) {
         err = adc1_config_channel_atten(self->channel_id, atten);
     } else {
-        err = adc2_config_channel_atten(self->channel_id, atten);
+        err = adc1_config_channel_atten(self->channel_id, atten);
     }
     if (err != ESP_OK) {
         mp_raise_ValueError(MP_ERROR_TEXT("invalid atten"));
