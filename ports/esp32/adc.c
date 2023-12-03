@@ -28,7 +28,9 @@
 #include "py/mphal.h"
 #include "adc.h"
 #include "driver/adc.h"
-#include "esp_adc_cal.h"
+#include "esp_adc/adc_oneshot.h"
+#include "esp_adc/adc_cali.h"
+#include "esp_adc/adc_cali_scheme.h"
 
 #define DEFAULT_VREF 1100
 
@@ -72,22 +74,33 @@ void madcblock_bits_helper(machine_adc_block_obj_t *self, mp_int_t bits) {
 
 mp_int_t madcblock_read_helper(machine_adc_block_obj_t *self, adc_channel_t channel_id) {
     int raw;
-    //if (self->unit_id == ADC_UNIT_1) {
-        raw = adc1_get_raw(channel_id);
-    //} else {
-    //    check_esp_err(adc2_get_raw(channel_id, self->width, &raw));
-    //}
+    adc_oneshot_unit_handle_t adc_handle;
+    adc_oneshot_unit_init_cfg_t init_config = {
+        .unit_id = self->unit_id,
+        .ulp_mode = ADC_ULP_MODE_DISABLE,
+    };
+
+    ESP_ERROR_CHECK(adc_oneshot_new_unit(&init_config, &adc_handle));
+    ESP_ERROR_CHECK(adc_oneshot_read(adc_handle, channel_id, &raw));
+    ESP_ERROR_CHECK(adc_oneshot_del_unit(adc_handle));
     return raw;
 }
 
 mp_int_t madcblock_read_uv_helper(machine_adc_block_obj_t *self, adc_channel_t channel_id, adc_atten_t atten) {
     int raw = madcblock_read_helper(self, channel_id);
-    esp_adc_cal_characteristics_t *adc_chars = self->characteristics[atten];
-    if (adc_chars == NULL) {
-        adc_chars = malloc(sizeof(esp_adc_cal_characteristics_t));
-        esp_adc_cal_characterize(self->unit_id, atten, self->width, DEFAULT_VREF, adc_chars);
-        self->characteristics[atten] = adc_chars;
-    }
-    mp_int_t uv = esp_adc_cal_raw_to_voltage(raw, adc_chars) * 1000;
-    return uv;
+
+    adc_cali_handle_t handle = NULL;
+    adc_cali_curve_fitting_config_t cali_config = {
+        .unit_id = self->unit_id,
+        .chan = channel_id,
+        .atten = atten,
+        .bitwidth = DEFAULT_VREF,
+    };
+
+    ESP_ERROR_CHECK(adc_cali_create_scheme_curve_fitting(&cali_config, &handle));
+
+    int voltage = 0;
+    ESP_ERROR_CHECK(adc_cali_raw_to_voltage(handle, raw, &voltage));
+
+    return voltage*1000;
 }

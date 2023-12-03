@@ -1,5 +1,3 @@
-set(CMAKE_VERBOSE_MAKEFILE ON)
-
 # Set location of base MicroPython directory.
 if(NOT MICROPY_DIR)
     get_filename_component(MICROPY_DIR ${CMAKE_CURRENT_LIST_DIR}/../.. ABSOLUTE)

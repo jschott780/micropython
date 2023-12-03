@@ -6,6 +6,4 @@
 #define MICROPY_PY_NETWORK_HOSTNAME_DEFAULT "esp32c6"
 #define MICROPY_HW_ENABLE_SDCARD (0)
 #define MICROPY_GCREGS_SETJMP (1)
-#define SOC_DAC_SUPPORTED (0)
-//#include "soc/uart_periph.h"
-//#include "hal/uart_types.h"
+#define MICROPY_PY_MACHINE_DAC (0)
