@@ -53,6 +53,8 @@ list(APPEND MICROPY_SOURCE_DRIVERS
 )
 
 list(APPEND MICROPY_SOURCE_PORT
+    esp_adc_cal_legacy.c
+    esp_adc_cal_common_legacy.c
     adc.c
     main.c
     ppp_set_auth.c
@@ -106,6 +108,7 @@ list(APPEND IDF_COMPONENTS
     bootloader_support
     bt
     driver
+    efuse
     esp_adc
     esp_app_format
     esp_common
@@ -134,6 +137,12 @@ list(APPEND IDF_COMPONENTS
     spi_flash
     ulp
     vfs
+)
+
+list(APPEND IDF_HDR
+)
+
+list(APPEND IDF_SRC
 )
 
 # Register the main IDF component.
